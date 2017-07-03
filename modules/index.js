@@ -12,6 +12,7 @@ module.exports.messageRoutes = {
   ">yeah": million.yes,
   ">no": million.no,
   ">nope": million.no,
-  ">addCondition": million.addCondition,
-  ">addOutcome": million.addOutcome
+  ">addcondition": million.addCondition,
+  ">addoutcome": million.addOutcome,
+  ">wealth": million.scores
 }

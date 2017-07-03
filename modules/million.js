@@ -5,7 +5,7 @@ var yaml    = require('js-yaml');
 
 var CONDITIONS = [];
 var OUTCOMES = [];
-var SCORESFILE = fs.readFileSync(path.resolve(__dirname, '../data/million/userscores.txt'));
+var SCORESFILE = path.resolve(__dirname, '../data/million/userscores.txt');
 
 var inRound = false;
 var roundResults = {};
@@ -21,7 +21,7 @@ var currentQ;
   OUTCOMES = OUTCOMES.concat(data.split('\n'));
 });
 
-var SCORES = yaml.safeLoad(SCORESFILE, 'utf8');
+var SCORES = yaml.safeLoad(fs.readFileSync(SCORESFILE, 'utf8'));
 
 var produceQuestion = function(){
   var condition = CONDITIONS[Math.floor(CONDITIONS.length * Math.random())];
@@ -50,6 +50,7 @@ var endRound = function(channel){
   }
 
   channel.send(`The round is over! Here were the votes for '${currentQ}':\n${resultsStr}`);
+  writeScores();
 };
 
 module.exports.question = function(message){
@@ -73,4 +74,22 @@ module.exports.yes = function(message){
 
 module.exports.no = function(message){
   if (inRound) roundResults[message.author.username] = "No";
+};
+
+module.exports.scores = function(message){
+  var scoreMessage = "";
+
+  for (var user in SCORES){
+    scoreMessage += `${user} has received \$${SCORES[user].taken} million so far, accepting ${Math.floor(SCORES[user].taken / (SCORES[user].taken + SCORES[user].refused) * 100)}% of voted scenarios!\n`
+  }
+
+  message.channel.send(scoreMessage);
+};
+
+module.exports.addCondition = function(message){
+  fs.appendFile(path.resolve(__dirname, '../data/million', 'userconditions.txt'), message.content.slice(14));
+};
+
+module.exports.addOutcome = function(message){
+  fs.appendFile(path.resolve(__dirname, '../data/million', 'useroutcomes.txt'), message.content.slice(12));
 };
