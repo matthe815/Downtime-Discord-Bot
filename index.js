@@ -3,7 +3,6 @@ var fs      = require('fs');
 var path    = require('path');
 
 var client  = require('./client');
-var modules = require('./modules');
 
 try {
   var KEYS = yaml.safeLoad(

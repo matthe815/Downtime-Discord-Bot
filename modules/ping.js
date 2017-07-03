@@ -1,7 +1,3 @@
-var client = require('../client');
-
-client.on('message', function(message){
-  if (message.content === "ping") {
-    message.channel.send("pong");
-  }
-});
+module.exports.ping = function(message){
+  message.channel.send("pong");
+};

@@ -3,3 +3,6 @@ keys.yml
 
 # Ignore packages
 node_modules/
+
+# Ignore Million game files
+data/million/*
