@@ -1,5 +1,6 @@
 var ping = require('./ping');
 var million = require('./million');
+var flickr = require('./flickr');
 
 module.exports.messageRoutes = {
   // Ping
@@ -14,5 +15,17 @@ module.exports.messageRoutes = {
   ">nope": million.no,
   ">addcondition": million.addCondition,
   ">addoutcome": million.addOutcome,
-  ">wealth": million.scores
-}
+  ">wealth": million.scores,
+
+  // Flickr
+  ">birb": flickr.birb,
+  ">bird": flickr.birb,
+  ">birdie": flickr.birb,
+  ">dog": flickr.doggo,
+  ">doggie": flickr.doggo,
+  ">doggo": flickr.doggo,
+  ">cat": flickr.kitty,
+  ">kitty": flickr.kitty,
+  ">betta": flickr.betta,
+  ">image": flickr.imageSearch
+};
