@@ -32,5 +32,6 @@ module.exports.messageRoutes = {
 
   // Random
   ">dice": random.dice,
+  ">roll": random.dice,
   ">pick": random.pick
 };
