@@ -1,0 +1,5 @@
+# Ignore private keys
+keys.yml
+
+# Ignore packages
+node_modules/

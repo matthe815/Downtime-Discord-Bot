@@ -1,0 +1,15 @@
+{
+  "name": "downtime-discord-bot",
+  "version": "1.0.0",
+  "description": "A bot for the Downtime Discord community",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^11.1.0",
+    "js-yaml": "^3.8.4"
+  }
+}
