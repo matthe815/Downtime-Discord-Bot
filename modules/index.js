@@ -1,6 +1,7 @@
 var ping = require('./ping');
 var million = require('./million');
 var flickr = require('./flickr');
+var danbooru = require('./danbooru');
 var random = require('./random');
 
 module.exports.messageRoutes = {
@@ -29,6 +30,11 @@ module.exports.messageRoutes = {
   ">kitty": flickr.kitty,
   ">betta": flickr.betta,
   ">image": flickr.imageSearch,
+
+  // danbooru
+  ">safe": danbooru.safe,
+  ">ecchi": danbooru.ecchi,
+  ">nsfw": danbooru.nsfw,
 
   // Random
   ">dice": random.dice,

@@ -7,11 +7,19 @@ client.on('ready', function() {
 });
 
 client.on('message', function(message) {
-  if (message.author.bot) return;
-  var content = message.content;
-  var command = content.indexOf(" ") >= 0 ? content.substr(0, content.indexOf(" ")).toLowerCase() : content.toLowerCase();
+  try
+  {
+    if (message.author.bot) return;
+    var content = message.content;
+    var command = content.indexOf(" ") >= 0 ? content.substr(0, content.indexOf(" ")).toLowerCase() : content.toLowerCase();
 
-  if (modules.messageRoutes[command]) modules.messageRoutes[command](message);
+    if (modules.messageRoutes[command]) modules.messageRoutes[command](message);
+  }
+  catch(e)
+  {
+    console.warn("A fatal error occured.")
+    console.warn(e);
+  }
 });
 
 module.exports = client;
