@@ -9,7 +9,7 @@ var getImage = function(keyword, channel){
   request(createRequestUrl(keyword), function(err, res, body){
     var photos = JSON.parse(body).photos.photo;
     var photo = photos[Math.floor(Math.random() * 100)];
-    while(!photo.url_o) photo = photos[Math.floor(Math.random() * 100)];
+    while(!photo || !photo.url_o) photo = photos[Math.floor(Math.random() * 100)];
     channel.send(photo.url_o);
   });
 };
