@@ -2,19 +2,23 @@ var keys    = require('../util/keys');
 var request = require('request');;
 
 var createRequestUrl = function(keyword){
-  return `https://api.flickr.com/services/rest/?method=flickr.photos.search&format=json&nojsoncallback=1&extras=url_o&api_key=${keys.FLICKR.KEY}&tags=${keyword}`;
+  return `https://api.flickr.com/services/rest/?method=flickr.photos.search&format=json&nojsoncallback=1&extras=url_o&api_key=${keys.FLICKR.KEY}&tag_mode=all&tags=${keyword}`;
 };
 
 var getImage = function(keyword, channel){
   request(createRequestUrl(keyword), function(err, res, body){
-    var photos = JSON.parse(body).photos.photo;
-    var photo = photos[Math.floor(Math.random() * 100)];
-    if (!photo){
+    try {
+      var photos = JSON.parse(body).photos.photo.filter(function(photo){
+        return photo.url_o;
+      });
+
+      var photo = photos[Math.floor(Math.random() * photos.length)];
+
+      if (!photo || !photo.url_o) throw "photo missing"
+      channel.send(photo.url_o);
+    } catch (e) {
       channel.send("Failed to get image from Flickr");
-      return;
     }
-    while(!photo.url_o) photo = photos[Math.floor(Math.random() * 100)];
-    channel.send(photo.url_o);
   });
 };
 

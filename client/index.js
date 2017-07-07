@@ -7,18 +7,15 @@ client.on('ready', function() {
 });
 
 client.on('message', function(message) {
-  try
-  {
+  var content = message.content;
+  try {
     if (message.author.bot) return;
-    var content = message.content;
     var command = content.indexOf(" ") >= 0 ? content.substr(0, content.indexOf(" ")).toLowerCase() : content.toLowerCase();
 
     if (modules.messageRoutes[command]) modules.messageRoutes[command](message);
-  }
-  catch(e)
-  {
-    console.warn("A fatal error occured.")
-    console.warn(e);
+  } catch(e) {
+    console.warn(`error occured while attempting to handle message syncronously: ${content}`);
+    console.warn(`Error: ${e}`);
   }
 });
 
