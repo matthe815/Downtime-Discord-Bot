@@ -2,6 +2,7 @@ var danbooru  = require('./danbooru');
 var flickr    = require('./flickr');
 var million   = require('./million');
 var ping      = require('./ping');
+var quote     = require('./quote');
 var random    = require('./random');
 var urban     = require('./urban');
 
@@ -43,5 +44,8 @@ module.exports.messageRoutes = {
   ">pick": random.pick,
 
   // Urban Dictionary
-  ">urban": urban.urban
+  ">urban": urban.urban,
+
+  // Quote
+  ">quote": quote.quote
 };
