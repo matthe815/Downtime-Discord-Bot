@@ -11,20 +11,17 @@ var MAX_ATTEMPTS = 3;
 var ERROR_TRYAGAIN = "An error occured. Please try again.";
 
 /** Request and post an explicit image from danbooru. */
-module.exports.nsfw = function(message)
-{
+module.exports.nsfw = function(message){
   requestNsfwImage(message, "explicit");
 }
 
 /** Request and post a questionable image from danbooru. */
-module.exports.ecchi = function(message)
-{
+module.exports.ecchi = function(message){
   requestNsfwImage(message, "questionable");
 }
 
 /** Request and post a safe image from danbooru. */
-module.exports.safe = function(message)
-{
+module.exports.safe = function(message){
   requestImage(message, "safe", MAX_ATTEMPTS);
 }
 
@@ -33,8 +30,7 @@ module.exports.safe = function(message)
  * @param {Message} message The message that was received. Used to determine the channel (and the user, if necessary).
  * @param {String} rating The rating to use ('safe', 'questionable' or 'explicit'. See danbooru)
  */
-function requestNsfwImage(message, rating)
-{
+function requestNsfwImage(message, rating){
   if(message.channel.nsfw)
     requestImage(message, rating, MAX_ATTEMPTS);
   else
@@ -48,13 +44,10 @@ function requestNsfwImage(message, rating)
  * @param {Number} count  The number of attempts that are made, if errors occur. You may get responses without images (only visible for gold members) from
  *                        danbooru, in this case the bot makes another request.
  */
-function requestImage(message, rating, attempts)
-{
+function requestImage(message, rating, attempts){
   request("https://danbooru.donmai.us/posts.json?random=true&limit=1&tags=rating:" + rating,
-  function(error, response, body)
-  {
-    if(error !== null)
-    {
+  function(error, response, body){
+    if(error !== null){
       // Should probably tell the user what happened, at least give them a general idea ...
       message.channel.send(ERROR_TRYAGAIN);
       return; // No point in moving on, abort.
