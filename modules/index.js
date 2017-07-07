@@ -1,8 +1,9 @@
-var ping = require('./ping');
-var million = require('./million');
-var flickr = require('./flickr');
-var danbooru = require('./danbooru');
-var random = require('./random');
+var danbooru  = require('./danbooru');
+var flickr    = require('./flickr');
+var million   = require('./million');
+var ping      = require('./ping');
+var random    = require('./random');
+var urban     = require('./urban');
 
 module.exports.messageRoutes = {
   // Ping
@@ -39,5 +40,8 @@ module.exports.messageRoutes = {
   // Random
   ">dice": random.dice,
   ">roll": random.dice,
-  ">pick": random.pick
+  ">pick": random.pick,
+
+  // Urban Dictionary
+  ">urban": urban.urban
 };
