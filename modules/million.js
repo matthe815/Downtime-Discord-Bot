@@ -87,9 +87,13 @@ module.exports.scores = function(message){
 };
 
 module.exports.addCondition = function(message){
-  fs.appendFile(path.resolve(__dirname, '../data/million', 'userconditions.txt'), message.content.slice(14));
+  var condition = message.content.slice(14);
+  fs.appendFile(path.resolve(__dirname, '../data/million', 'userconditions.txt'), `${condition}\n`);
+  message.reply(`added condition ${condition}`);
 };
 
 module.exports.addOutcome = function(message){
-  fs.appendFile(path.resolve(__dirname, '../data/million', 'useroutcomes.txt'), message.content.slice(12));
+  var outcome = message.content.slice(12);
+  fs.appendFile(path.resolve(__dirname, '../data/million', 'useroutcomes.txt'), `${outcome}\n`);
+  message.reply(`added outcome ${outcome}`);
 };
