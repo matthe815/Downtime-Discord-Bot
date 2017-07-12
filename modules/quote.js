@@ -3,7 +3,9 @@ module.exports.quote = async function(message){
   if(!mention) return;
 
   var toQuote = message.channel.messages.filter(function(msg){
-    return msg.author.id === mention.id.toString() && msg.id !== message.id;
+    return (msg.author.id === mention.id.toString() &&
+            msg.id !== message.id &&
+            msg.type === 'DEFAULT');
   }).last();
 
   var result = await message.channel.send({embed: {
