@@ -5,6 +5,7 @@ var ping      = require('./ping');
 var quote     = require('./quote');
 var random    = require('./random');
 var urban     = require('./urban');
+var f         = require('./f');
 
 module.exports.messageRoutes = {
   // Ping
@@ -32,6 +33,7 @@ module.exports.messageRoutes = {
   ">kitty": flickr.kitty,
   ">betta": flickr.betta,
   ">image": flickr.imageSearch,
+  ">hug": flickr.hug,
 
   // danbooru
   ">safe": danbooru.safe,
@@ -47,5 +49,9 @@ module.exports.messageRoutes = {
   ">urban": urban.urban,
 
   // Quote
-  ">quote": quote.quote
+  ">quote": quote.quote,
+
+  // Respects Paid
+  ">F": f.F,
+  ">rip": f.rip
 };

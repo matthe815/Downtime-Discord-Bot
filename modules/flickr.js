@@ -38,6 +38,10 @@ module.exports.betta = function(message){
   getImage("betta fish", message.channel);
 };
 
+module.exports.hug = function(message){
+  getImage("hug", message.channel);
+};
+
 module.exports.imageSearch = function(message){
   getImage(message.content.slice(6), message.channel);
 };
