@@ -52,6 +52,6 @@ module.exports.messageRoutes = {
   ">quote": quote.quote,
 
   // Respects Paid
-  ">F": f.F,
+  ">f": f.F,
   ">rip": f.rip
 };
