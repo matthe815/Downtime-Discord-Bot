@@ -5,7 +5,13 @@ var ping      = require('./ping');
 var quote     = require('./quote');
 var random    = require('./random');
 var urban     = require('./urban');
-var f         = require('./f');
+var troll     = require('./troll');
+
+async function help (message) {
+  cmds = Object.keys(module.exports.messageRoutes);
+  cmdstr = cmds.join("\n");
+  await message.author.sendMessage("Bot Commands list\n\*" + cmdstr + "\*");
+};
 
 module.exports.messageRoutes = {
   // Ping
@@ -51,7 +57,13 @@ module.exports.messageRoutes = {
   // Quote
   ">quote": quote.quote,
 
-  // Respects Paid
-  ">f": f.F,
-  ">rip": f.rip
+  // Troll commands
+  ">f": troll.F,
+  ">rip": troll.rip,
+  ">throw": troll.tablethrow,
+  ">lenny": troll.lenny,
+  ">lennyface": troll.lenny,
+
+  // Help
+  ">help": help
 };
