@@ -1,28 +1,28 @@
-var request = require('request');
+const request = require('request')
 
 /**
  * The maximum number of attempts if the bot does not get an image at the first try. This may happen if the first image is marked as Loli/shota. Danbooru will
  * still list them, but not show them unless you have a gold account. This means we may, once in a while, get a response without an image path, so we cannot
  * display anything. Therefore we try again.
  */
-var MAX_ATTEMPTS = 3;
+const MAX_ATTEMPTS = 3
 
 /** "Constant" for error messages. */
-var ERROR_TRYAGAIN = "An error occured. Please try again.";
+const ERROR_TRYAGAIN = "An error occured. Please try again."
 
 /** Request and post an explicit image from danbooru. */
 module.exports.nsfw = function(message){
-  requestNsfwImage(message, "explicit");
+  requestNsfwImage(message, "explicit")
 }
 
 /** Request and post a questionable image from danbooru. */
 module.exports.ecchi = function(message){
-  requestNsfwImage(message, "questionable");
+  requestNsfwImage(message, "questionable")
 }
 
 /** Request and post a safe image from danbooru. */
 module.exports.safe = function(message){
-  requestImage(message, "safe", MAX_ATTEMPTS);
+  requestImage(message, "safe", MAX_ATTEMPTS)
 }
 
 /**
@@ -32,9 +32,9 @@ module.exports.safe = function(message){
  */
 function requestNsfwImage(message, rating){
   if(message.channel.nsfw)
-    requestImage(message, rating, MAX_ATTEMPTS);
+    requestImage(message, rating, MAX_ATTEMPTS)
   else
-    message.channel.send(`I'm sorry, ${message.author}, i'm afraid i can't do that.`);
+    message.channel.send(`I'm sorry, ${message.author}, i'm afraid i can't do that.`)
 }
 
 /**
@@ -46,21 +46,21 @@ function requestNsfwImage(message, rating){
  */
 function requestImage(message, rating, attempts){
   request("https://danbooru.donmai.us/posts.json?random=true&limit=1&tags=rating:" + rating,
-  function(error, response, body){
+  (error, response, body) => {
     if(error !== null){
       // Should probably tell the user what happened, at least give them a general idea ...
-      message.channel.send(ERROR_TRYAGAIN);
-      return; // No point in moving on, abort.
+      message.channel.send(ERROR_TRYAGAIN)
+      return // No point in moving on, abort.
     }
 
-    var arr = JSON.parse(body);
-    var entry = arr[0];
+    const arr = JSON.parse(body)
+    const entry = arr[0]
 
     if(entry.hasOwnProperty("file_url"))
-      message.channel.send("https://danbooru.donmai.us" + entry.file_url);
+      message.channel.send("https://danbooru.donmai.us" + entry.file_url)
     else if(attempts > 0)
-      requestImage(message, rating, attempts - 1);
+      requestImage(message, rating, attempts - 1)
     else
-      message.channel.send(ERROR_TRYAGAIN);
-  });
+      message.channel.send(ERROR_TRYAGAIN)
+  })
 }

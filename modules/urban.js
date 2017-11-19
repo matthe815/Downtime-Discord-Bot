@@ -1,10 +1,10 @@
-var request = require('request');;
+const request = require('request')
 
 module.exports.urban = function(message){
-  var query = message.content.slice(6);
-  request(`http://api.urbandictionary.com/v0/define?term=${query}`, function(err, res, body){
+  const query = message.content.slice(6)
+  request(`http://api.urbandictionary.com/v0/define?term=${query}`, (err, res, body) => {
     try {
-      var result = JSON.parse(body).list[0];
+      const result = JSON.parse(body).list[0]
       message.channel.send({embed: {
         author: {
           name: "urban dictionary",
@@ -17,10 +17,10 @@ module.exports.urban = function(message){
         footer: {
           text: `by ${result.author}`
         }
-      }});
+      }})
     } catch(e) {
-      console.log(e);
-      message.channel.send("Failed to get data from urbandictionary");
+      console.log(e)
+      message.channel.send("Failed to get data from urbandictionary")
     }
-  });
-};
+  })
+}

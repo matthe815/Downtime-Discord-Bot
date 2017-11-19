@@ -1,14 +1,14 @@
 module.exports.quote = async function(message){
-  var mention = message.mentions.users.first();
-  if(!mention) return;
+  const mention = message.mentions.users.first()
+  if(!mention) return
 
-  var toQuote = message.channel.messages.filter(function(msg){
+  const toQuote = message.channel.messages.filter(msg => {
     return (msg.author.id === mention.id.toString() &&
             msg.id !== message.id &&
-            msg.type === 'DEFAULT');
-  }).last();
+            msg.type === 'DEFAULT')
+  }).last()
 
-  var result = await message.channel.send({embed: {
+  const result = await message.channel.send({embed: {
     color: 1811429,
     author: {
       name: toQuote.author.username,
@@ -16,6 +16,6 @@ module.exports.quote = async function(message){
     },
     description: toQuote.content,
     timestamp: new Date(toQuote.createdTimestamp)
-  }});
-  result.pin();  
-};
+  }})
+  result.pin()  
+}
