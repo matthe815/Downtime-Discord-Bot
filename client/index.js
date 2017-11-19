@@ -6,7 +6,7 @@ client.on('ready', function() {
   console.log("Logged in as " + client.user.tag)
 })
 
-client.on('message', function(message) {
+client.on('message', message => {
   const content = message.content
   try {
     if (message.author.bot) return
