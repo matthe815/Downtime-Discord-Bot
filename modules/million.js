@@ -44,21 +44,21 @@ function writeScores(){
   roundResults = {}
 }
 
-function endRound(channel){
+function endRound(message){
   inRound = false
   let resultsStr = ""
-  for (let user in roundResults) {
-    resultsStr += `${user}: ${roundResults[user]}\n`
+  for (let userId in roundResults) {
+    resultsStr += `${message.guild.members.find('id', userId)}: ${roundResults[userId]}\n`
   }
 
-  channel.send(`The round is over! Here were the votes for '${currentQ}':\n${resultsStr}`)
+  message.channel.send(`The round is over! Here were the votes for '${currentQ}':\n${resultsStr}`)
   writeScores()
 }
 
 module.exports.question = function(message){
   if (message.channel.type !== 'dm' && !inRound) {
     inRound = true
-    setTimeout(endRound.bind(this, message.channel), 90000)
+    setTimeout(() => {endRound(message)}, 90000)
 
     currentQ = produceQuestion()
     message.channel.send(currentQ)
@@ -71,19 +71,22 @@ module.exports.question = function(message){
 }
 
 module.exports.yes = function(message){
-  if (inRound) roundResults[message.author.username] = "Yes"
+  if (inRound) roundResults[message.author.id] = "Yes"
 }
 
 module.exports.no = function(message){
-  if (inRound) roundResults[message.author.username] = "No"
+  if (inRound) roundResults[message.author.id] = "No"
 }
 
 module.exports.scores = function(message){
-  const scoreMessage = ""
+  let scoreMessage = ""
 
-  SCORES.forEach(user => {
-    scoreMessage += `${user} has received \$${SCORES[user].taken} million so far, accepting ${Math.floor(SCORES[user].taken / (SCORES[user].taken + SCORES[user].refused) * 100)}% of voted scenarios!\n`
-  })
+  for (let userId in SCORES) {
+    const user = message.guild.members.find('id', userId)
+    scoreMessage += `${user} has received \$${SCORES[userId].taken} million so far, accepting \
+${Math.floor(SCORES[userId].taken / (SCORES[userId].taken + SCORES[userId].refused) * 100)}% \
+of voted scenarios!\n`
+  }
 
   message.channel.send(scoreMessage)
 }
