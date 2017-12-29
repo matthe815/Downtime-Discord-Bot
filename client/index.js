@@ -10,6 +10,7 @@ client.on('message', message => {
   const content = message.content
   try {
     if (message.author.bot) return
+
     const command = content.indexOf(" ") >= 0 ? content.substr(0, content.indexOf(" ")).toLowerCase() : content.toLowerCase()
 
     if (modules.messageRoutes[command]) {
@@ -23,14 +24,16 @@ client.on('message', message => {
 
 //create event listener for new members
 client.on('guildMemberAdd', member => {
-    //Sends greeting to the default channel mentioning the member.
-    member.guild.defaultChannel.send(`Welcome to the server, ${member.displayName}!`)
+    //Sends greeting to the channel for system messages (has to be set in server settings), mentioning the member.
+    if(member.guild.systemChannel != null)
+      member.guild.systemChannel.send(`Welcome to the server, ${member.displayName}!`);
 })
 
 //create event listener for when members leave server
 client.on('guildMemberRemove', member => {
-    //Sends leave message to the default channel 
-    member.guild.defaultChannel.send(`${member.displayName} has left the server.`)
+    //Sends leave message to the channel for system messages (has to be set in server settings)
+    if(member.guild.systemChannel != null)
+      member.guild.systemChannel.send(`${member.displayName} has left the server.`);
 })
 
 module.exports = client
