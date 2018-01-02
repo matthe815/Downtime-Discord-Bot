@@ -7,6 +7,13 @@ const random    = require('./random')
 const urban     = require('./urban')
 const troll     = require('./troll')
 
+// listeners
+const ark       = require('./listen/ark')
+
+const listeners = [
+  ark.listen
+]
+
 async function help (message) {
   cmds = Object.keys(module.exports.messageRoutes)
   cmdstr = cmds.join("\n")
@@ -66,4 +73,8 @@ module.exports.messageRoutes = {
 
   // Help
   ">help": help
+}
+
+module.exports.listen = function(client) {
+  listeners.forEach(lFunc => lFunc(client))
 }

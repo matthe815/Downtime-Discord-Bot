@@ -4,6 +4,7 @@ const modules   = require('../modules')
 
 client.on('ready', () => {
   console.log("Logged in as " + client.user.tag)
+  modules.listen(client)
 })
 
 client.on('message', message => {

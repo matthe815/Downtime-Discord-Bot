@@ -11,6 +11,7 @@
   "dependencies": {
     "discord.js": "^11.2.1",
     "js-yaml": "^3.8.4",
-    "request": "^2.81.0"
+    "request": "^2.81.0",
+    "ssq": "0.0.1"
   }
 }
