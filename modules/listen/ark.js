@@ -33,10 +33,10 @@ module.exports.listen = function(client) {
   const channel = client.channels.find('id', keys.ARK_CH_ID)
   const admin = client.users.find('id', keys.ADMIN)
   const cUser = client.user
-  // players(channel)
+  players(channel)
   info(channel, admin, cUser)
-  // setInterval(() => {
-  //   info()
-  //   players()
-  // }, 3600000)
+  setInterval(() => {
+    players(channel)
+    info(channel, admin, cUser)
+  }, 3600000)
 }
