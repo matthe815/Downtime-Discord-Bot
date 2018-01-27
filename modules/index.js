@@ -4,8 +4,9 @@ const million   = require('./million')
 const ping      = require('./ping')
 const quote     = require('./quote')
 const random    = require('./random')
-const urban     = require('./urban')
 const troll     = require('./troll')
+const steam     = require('./steam')
+const urban     = require('./urban')
 
 // listeners
 const ark       = require('./listen/ark')
@@ -70,6 +71,12 @@ module.exports.messageRoutes = {
   ">throw": troll.tablethrow,
   ">lenny": troll.lenny,
   ">lennyface": troll.lenny,
+  ">shameshame": troll.shame,
+
+  ">details": steam.GetPlayerDetails,
+  ">level": steam.GetPlayerLevel,
+  ">friends": steam.GetSteamFriends,
+  ">gameshame": steam.GetNumUnPlayedGames,
 
   // Help
   ">help": help
