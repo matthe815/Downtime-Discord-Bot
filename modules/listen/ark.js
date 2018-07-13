@@ -1,9 +1,8 @@
 const ssq = require('ssq');
 const keys    = require('../../util/keys')
-const server = ['MyNameIsKir.com', 27015]
 
 function info(channel, admin, cUser) {
-  ssq.info(...server, (err, info) => {
+  ssq.info(...keys.ARK, (err, info) => {
     if (err) {
       if (err.code === 'ENOTFOUND')
         channel.send(`Uh oh! By my calculations, there's a disturbance in the ark server. Hey ${admin.toString()}, could you check this out?`)
@@ -16,7 +15,7 @@ function info(channel, admin, cUser) {
 }
 
 function players(channel) {
-  ssq.players(...server, (err, players) => {
+  ssq.players(...keys.ARK, (err, players) => {
     if (err)
       console.log("There was an error fetching ark server players: ", err)
     else
@@ -31,7 +30,7 @@ function players(channel) {
 
 module.exports.listen = function(client) {
   const channel = client.channels.find('id', keys.ARK_CH_ID)
-  const admin = client.users.find('id', keys.ADMIN)
+  const admin = client.users.find('id', keys.ARK_ADMIN)
   const cUser = client.user
   players(channel)
   info(channel, admin, cUser)
