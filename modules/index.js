@@ -13,6 +13,8 @@ const listeners = [
 async function help (message) {
   const cmds = Object.keys(module.exports.messageRoutes)
   const cmdstr = cmds.join('\n')
+
+  message.reply('Check your DMs.')
   await message.author.sendMessage(`Bot Commands list\n*${cmdstr}*`)
 }
 
