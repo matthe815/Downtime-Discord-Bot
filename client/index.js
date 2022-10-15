@@ -1,13 +1,14 @@
 const Discord   = require('discord.js')
-const client    = new Discord.Client()
+const client    = new Discord.Client({ intents: [ 'GuildMessages', 'Guilds', 'MessageContent' ] })
 const modules   = require('../modules')
 
-client.on('ready', () => {
-  console.log("Logged in as " + client.user.tag)
+client.once('ready', () => {
+  console.log(`Logged in as ${client.user.tag}`)
   modules.listen(client)
 })
 
-client.on('message', message => {
+client.on('messageCreate', message => {
+  console.log(message)
   const content = message.content
   try {
     if (message.author.bot) return

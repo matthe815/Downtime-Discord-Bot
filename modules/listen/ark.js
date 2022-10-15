@@ -29,8 +29,8 @@ function players(channel) {
 }
 
 module.exports.listen = function(client) {
-  const channel = client.channels.find('id', keys.ARK_CH_ID)
-  const admin = client.users.find('id', keys.ARK_ADMIN)
+  const channel = client.channels.cache.find((user) => user.id == keys.ARK_CH_ID)
+  const admin = client.users.cache.find((user) => user.id == keys.ARK_ADMIN)
   const cUser = client.user
   players(channel)
   info(channel, admin, cUser)
