@@ -1,17 +1,32 @@
-const path    = require('path')
-const fs      = require('fs')
-const yaml    = require('js-yaml')
+const path = require('path')
+const fs = require('fs')
+const yaml = require('js-yaml')
 
-let conditions = []
-let outcomes = []
 const SCORESFILE = path.resolve(__dirname, '../data/million/userscores.txt')
 const SCORES = yaml.load(fs.readFileSync(SCORESFILE, 'utf8')) || {}
 const conditionFiles = ['conditions.txt', 'userconditions.txt']
 const outcomeFiles = ['outcomes.txt', 'useroutcomes.txt']
+const ONE_MINUTE = 60000
 
+let conditions = []
+let outcomes = []
 let inRound = false
 let roundResults = {}
-let currentQ = ""
+let currentQ = ''
+
+/**
+ * @typedef Message
+ * @prop {string} content
+ * @prop {Channel} channel
+ */
+
+/**
+ * @typedef Channel
+ * @prop {string} id
+ * @prop {string} name
+ * @prop {string} type
+ * @prop {Promise<Message>} send
+ */
 
 conditionFiles.forEach(filename => {
   const data = fs.readFileSync(path.resolve(__dirname, '../data/million', filename), 'utf8')
@@ -30,10 +45,10 @@ function produceQuestion () {
   return `You get a million dollars, but... ${condition.trim()}, ${outcome.trim()}`
 }
 
-function writeScores(){
-  for (let user in roundResults) {
+function writeScores () {
+  for (const user in roundResults) {
     SCORES[user] = SCORES[user] || { taken: 0, refused: 0 }
-    if (roundResults[user] === "Yes"){
+    if (roundResults[user] === 'Yes') {
       SCORES[user].taken++
     } else {
       SCORES[user].refused++
@@ -43,45 +58,68 @@ function writeScores(){
   roundResults = {}
 }
 
-function endRound(message){
+function endRound (message) {
   inRound = false
-  let resultsStr = ""
-  for (let userId in roundResults) {
-    resultsStr += `${message.guild.members.cache.find((user) => user.id == userId)}: ${roundResults[userId]}\n`
+  let resultsStr = ''
+
+  for (const userId in roundResults) {
+    resultsStr += `${message.guild.members.cache.find((user) => user.id === userId)}: ${roundResults[userId]}\n`
   }
 
   message.channel.send(`The round is over! Here were the votes for '${currentQ}':\n${resultsStr}`)
   writeScores()
 }
 
-module.exports.question = function(message){
-  if (message.channel.type !== 'dm' && !inRound) {
-    inRound = true
-    setTimeout(() => {endRound(message)}, 90000)
+/**
+ * Produces a new question or recites the current ongoing question
+ * @param {Message} message
+ */
+module.exports.question = (message) => {
+  if (message.channel.type === 'dm') return // Do not react to a DM.
 
-    currentQ = produceQuestion()
-    message.channel.send(currentQ)
-    message.channel.send("This is the scenario for the current round! Please vote using '>yes' or '>no' now!")
-  } else if (inRound) {
-    message.channel.send(`We're still open for voting! I will post when this round is over. The current scenario is: ${currentQ}`)
-  } else {
-    message.channel.send(produceQuestion())
+  // Produce a new question if not in a round, otherwise display the current one.
+  switch (inRound) {
+    case true:
+      inRound = true
+      setTimeout(() => { endRound(message) }, ONE_MINUTE * 2)
+
+      currentQ = produceQuestion()
+      message.channel.send(currentQ)
+      message.channel.send("This is the scenario for the current round! Please vote using '>yes' or '>no' now!")
+      return
+    case false:
+      message.channel.send(`We're still open for voting! I will post when this round is over. The current scenario is: ${currentQ}`)
   }
 }
 
-module.exports.yes = function(message){
-  if (inRound) roundResults[message.author.id] = "Yes"
+/**
+ * When the user responds yes, or a variation of yes.
+ * @param {Message} message
+ */
+module.exports.yes = (message) => {
+  if (!inRound) return
+  roundResults[message.author.id] = 'Yes'
 }
 
-module.exports.no = function(message){
-  if (inRound) roundResults[message.author.id] = "No"
+/**
+ * When the user responds no, or a variation of no.
+ * @param {Message} message
+ */
+module.exports.no = (message) => {
+  if (!inRound) return
+  roundResults[message.author.id] = 'No'
 }
 
-module.exports.scores = function(message){
-  let scoreMessage = ""
+/**
+ * List the scores for the current ongoing game.
+ * @param {Message} message
+ */
+module.exports.scores = (message) => {
+  let scoreMessage = ''
 
-  for (let userId in SCORES) {
-    const user = message.guild.members.cache.find((user) => user.id == userId)
+  for (const userId in SCORES) {
+    const user = message.guild.members.cache.find((user) => user.id === userId)
+
     scoreMessage += `${user.displayName} has received $${SCORES[userId].taken} million so far, accepting \
 ${Math.floor(SCORES[userId].taken / (SCORES[userId].taken + SCORES[userId].refused) * 100)}% \
 of voted scenarios!\n`
@@ -90,15 +128,35 @@ of voted scenarios!\n`
   message.channel.send(scoreMessage)
 }
 
-module.exports.addCondition = function(message){
+/**
+ * Adds a condition for the million questions
+ * @param {Message} message
+ */
+module.exports.addCondition = (message) => {
   const condition = message.content.slice(14)
+
+  if (condition.trim() === '') {
+    message.reply('You must supply content for a condition to be added.')
+    return
+  }
+
   conditions.push(condition)
   fs.appendFile(path.resolve(__dirname, '../data/million', 'userconditions.txt'), `${condition}\n`)
-  message.reply(`added condition ${condition}`)
+  message.reply(`Added condition ${condition}`)
 }
 
-module.exports.addOutcome = function(message){
+/**
+ * Adds a outcome for the millions questions.
+ * @param {Message} message
+ */
+module.exports.addOutcome = (message) => {
   const outcome = message.content.slice(12)
+
+  if (outcome.trim() === '') {
+    message.reply('You must supply content for an outcome to be added.')
+    return
+  }
+
   outcomes.push(outcome)
   fs.appendFile(path.resolve(__dirname, '../data/million', 'useroutcomes.txt'), `${outcome}\n`)
   message.reply(`added outcome ${outcome}`)
