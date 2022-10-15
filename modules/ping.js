@@ -1,3 +1,6 @@
-module.exports.ping = function (message) {
-  message.channel.send('pong')
+/**
+ * Make a test response.
+ */
+module.exports.ping = (message) => {
+  message.channel.send(`Pong! Ping: \`${message.client.ws.ping}ms\``)
 }
