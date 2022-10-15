@@ -5,7 +5,6 @@ const ping = require('./ping')
 const quote = require('./quote')
 const random = require('./random')
 const troll = require('./troll')
-const steam = require('./steam')
 const urban = require('./urban')
 
 const listeners = [
@@ -68,11 +67,6 @@ module.exports.messageRoutes = {
   '>lenny': troll.lenny,
   '>lennyface': troll.lenny,
   '>shameshame': troll.shame,
-
-  '>details': steam.GetPlayerDetails,
-  '>level': steam.GetPlayerLevel,
-  '>friends': steam.GetSteamFriends,
-  '>gameshame': steam.GetNumUnPlayedGames,
 
   // Help
   '>help': help
