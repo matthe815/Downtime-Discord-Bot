@@ -44,7 +44,7 @@ function requestNsfwImage (message, rating) {
 function requestImage (message, rating, attempts) {
   request('https://danbooru.donmai.us/posts.json?random=true&limit=1&tags=rating:' + rating,
     (error, response, body) => {
-      if (error !== null) {
+      if (error) {
       // Should probably tell the user what happened, at least give them a general idea ...
         message.channel.send(ERROR_TRYAGAIN)
         return // No point in moving on, abort.
@@ -53,8 +53,8 @@ function requestImage (message, rating, attempts) {
       const arr = JSON.parse(body)
       const entry = arr[0]
 
-      if (entry.hasOwnProperty('file_url')) {
-        url = entry.file_url
+      if (entry.file_url !== undefined) {
+        const url = entry.file_url
 
         if (url.startsWith('https://') || url.startsWith('http://')) { message.channel.send(url) } else { message.channel.send('https://danbooru.donmai.us' + url) }
       } else if (attempts > 0) { requestImage(message, rating, attempts - 1) } else { message.channel.send(ERROR_TRYAGAIN) }

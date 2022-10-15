@@ -7,6 +7,7 @@ const createRequestUrl = function (keyword) {
 
 const getImage = function (keyword, channel) {
   request(createRequestUrl(keyword), (err, res, body) => {
+    if (err) return console.log(err)
     try {
       const photos = JSON.parse(body).photos.photo.filter(photo => {
         return photo.url_o

@@ -14,7 +14,7 @@ module.exports.GetPlayerDetails = function (message) {
   const url = 'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=' + keys.STEAM.KEY + '&steamids=' + steamId
 
   request(url, (err, res, body) => {
-    if (err) console.log(err)
+    if (err) return console.log(err)
 
     const json = JSON.parse(body)
     const profile = json.response.players[0]
