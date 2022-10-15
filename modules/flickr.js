@@ -15,7 +15,7 @@ const getImage = function (keyword, channel) {
 
       const photo = photos[Math.floor(Math.random() * photos.length)]
 
-      if (!photo || !photo.url_o) throw 'photo missing'
+      if (!photo || !photo.url_o) throw new Error('photo missing')
       channel.send(photo.url_o)
     } catch (e) {
       channel.send('Failed to get image from Flickr')
