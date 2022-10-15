@@ -8,11 +8,7 @@ const troll     = require('./troll')
 const steam     = require('./steam')
 const urban     = require('./urban')
 
-// listeners
-const ark       = require('./listen/ark')
-
 const listeners = [
-  ark.listen
 ]
 
 async function help (message) {

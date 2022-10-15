@@ -1,4 +1,3 @@
-const client  = require('../client')
 const path    = require('path')
 const fs      = require('fs')
 const yaml    = require('js-yaml')
@@ -6,7 +5,7 @@ const yaml    = require('js-yaml')
 let conditions = []
 let outcomes = []
 const SCORESFILE = path.resolve(__dirname, '../data/million/userscores.txt')
-const SCORES = yaml.safeLoad(fs.readFileSync(SCORESFILE, 'utf8')) || {}
+const SCORES = yaml.load(fs.readFileSync(SCORESFILE, 'utf8')) || {}
 const conditionFiles = ['conditions.txt', 'userconditions.txt']
 const outcomeFiles = ['outcomes.txt', 'useroutcomes.txt']
 
@@ -24,7 +23,7 @@ outcomeFiles.forEach(filename => {
   outcomes = outcomes.concat(data.split('\n'))
 })
 
-function produceQuestion(){
+function produceQuestion () {
   const condition = conditions[Math.floor(conditions.length * Math.random())]
   const outcome = outcomes[Math.floor(outcomes.length * Math.random())]
 
@@ -83,7 +82,7 @@ module.exports.scores = function(message){
 
   for (let userId in SCORES) {
     const user = message.guild.members.find('id', userId)
-    scoreMessage += `${user.displayName} has received \$${SCORES[userId].taken} million so far, accepting \
+    scoreMessage += `${user.displayName} has received $${SCORES[userId].taken} million so far, accepting \
 ${Math.floor(SCORES[userId].taken / (SCORES[userId].taken + SCORES[userId].refused) * 100)}% \
 of voted scenarios!\n`
   }

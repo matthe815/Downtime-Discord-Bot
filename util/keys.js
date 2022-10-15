@@ -14,6 +14,6 @@ function keys(){
 }
 
 
-const KEYS = yaml.safeLoad(keys())
+const KEYS = yaml.load(keys())
 
 module.exports = KEYS
