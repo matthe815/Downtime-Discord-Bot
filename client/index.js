@@ -8,7 +8,6 @@ client.once('ready', () => {
 })
 
 client.on('messageCreate', message => {
-  console.log(message)
   const content = message.content
   try {
     if (message.author.bot) return
