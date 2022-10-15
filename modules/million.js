@@ -47,7 +47,7 @@ function endRound(message){
   inRound = false
   let resultsStr = ""
   for (let userId in roundResults) {
-    resultsStr += `${message.guild.members.find('id', userId)}: ${roundResults[userId]}\n`
+    resultsStr += `${message.guild.members.cache.find((user) => user.id == userId)}: ${roundResults[userId]}\n`
   }
 
   message.channel.send(`The round is over! Here were the votes for '${currentQ}':\n${resultsStr}`)
@@ -81,7 +81,7 @@ module.exports.scores = function(message){
   let scoreMessage = ""
 
   for (let userId in SCORES) {
-    const user = message.guild.members.find('id', userId)
+    const user = message.guild.members.cache.find((user) => user.id == userId)
     scoreMessage += `${user.displayName} has received $${SCORES[userId].taken} million so far, accepting \
 ${Math.floor(SCORES[userId].taken / (SCORES[userId].taken + SCORES[userId].refused) * 100)}% \
 of voted scenarios!\n`
