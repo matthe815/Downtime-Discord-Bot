@@ -13,6 +13,7 @@ let outcomes = []
 let inRound = false
 let roundResults = {}
 let currentQ = ''
+let currentQEndtime = 0
 
 /**
  * @typedef Message
@@ -66,6 +67,12 @@ function endRound (message) {
     resultsStr += `${message.guild.members.cache.find((user) => user.id === userId)}: ${roundResults[userId]}\n`
   }
 
+  // Nobody voted, so handle it different
+  if (resultsStr === '') {
+    message.channel.send('The round is over, and... nobody voted.')
+    return
+  }
+
   message.channel.send(`The round is over! Here were the votes for '${currentQ}':\n${resultsStr}`)
   writeScores()
 }
@@ -79,16 +86,17 @@ module.exports.question = (message) => {
 
   // Produce a new question if not in a round, otherwise display the current one.
   switch (inRound) {
-    case true:
+    case false:
       inRound = true
       setTimeout(() => { endRound(message) }, ONE_MINUTE * 2)
+      currentQEndtime = new Date(Date.now() + (ONE_MINUTE * 2)).getTime()
 
       currentQ = produceQuestion()
       message.channel.send(currentQ)
       message.channel.send("This is the scenario for the current round! Please vote using '>yes' or '>no' now!")
       return
-    case false:
-      message.channel.send(`We're still open for voting! I will post when this round is over. The current scenario is: ${currentQ}`)
+    case true:
+      message.channel.send(`We're still open for voting! I will post when this round is over. The current scenario is: ${currentQ}; remaining time: ${Math.floor(((currentQEndtime - new Date().getTime()) / 1000))} seconds.`)
   }
 }
 
