@@ -1,8 +1,8 @@
-const ssq     = require('source-server-query');
-const keys    = require('../../util/keys');
-const TIMEOUT = 3000;
+const ssq = require('source-server-query')
+const keys = require('../../util/keys')
+const TIMEOUT = 3000
 
-function info(channel, admin, cUser) {
+function info (channel, admin, cUser) {
   ssq.info(...keys.ARK, TIMEOUT)
     .then((info) => {
       if (!info.hasOwnProperty('game')) {
@@ -12,11 +12,11 @@ function info(channel, admin, cUser) {
       }
     })
     .catch(() => {
-      console.log("There was an error fetching ark server info: ", err)
+      console.log('There was an error fetching ark server info: ', err)
     })
 }
 
-function players(channel) {
+function players (channel) {
   ssq.players(...keys.ARK, TIMEOUT)
     .then((players) => {
       players.forEach((player) => {
@@ -28,7 +28,7 @@ function players(channel) {
     })
 }
 
-module.exports.listen = function(client) {
+module.exports.listen = function (client) {
   const channel = client.channels.cache.find((user) => user.id == keys.ARK_CH_ID)
   const admin = client.users.cache.find((user) => user.id == keys.ARK_ADMIN)
   const cUser = client.user

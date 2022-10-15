@@ -1,8 +1,8 @@
-module.exports.dice = function(message){
+module.exports.dice = (message) => {
   const args = message.content.slice(5)
   const d = args.indexOf('d')
 
-  if(d >= 0) {
+  if (d >= 0) {
     const dice = parseInt(args.slice(0, d)) || 1
     const eyes = parseInt(args.slice(d + 1)) || 6
 
@@ -10,7 +10,7 @@ module.exports.dice = function(message){
 
     const values = new Array(dice).fill(undefined).map(() => {
       const e = Math.floor(Math.random() * eyes) + 1
-      console.log(`e: ${e}, ${typeof(e)}`)
+      console.log(`e: ${e}, ${typeof (e)}`)
       sum += e
       return e
     })
@@ -27,8 +27,8 @@ module.exports.dice = function(message){
   }
 }
 
-module.exports.pick = function(message){
-  const args = message.content.slice(5).split(",")
+module.exports.pick = function (message) {
+  const args = message.content.slice(5).split(',')
   const pick = Math.floor(Math.random() * args.length)
   message.channel.send(`I choose ${args[pick].trim()}`)
 }
