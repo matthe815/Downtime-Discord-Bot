@@ -39,7 +39,7 @@ function writeScores(){
       SCORES[user].refused++
     }
   }
-  fs.writeFile(SCORESFILE, yaml.safeDump(SCORES))
+  fs.writeFile(SCORESFILE, yaml.dump(SCORES))
   roundResults = {}
 }
 
