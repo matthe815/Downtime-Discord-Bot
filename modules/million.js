@@ -128,6 +128,8 @@ module.exports.scores = (message) => {
   for (const userId in SCORES) {
     const user = message.guild.members.cache.find((user) => user.id === userId)
 
+    if (!user) continue
+
     scoreMessage += `${user.displayName} has received $${SCORES[userId].taken} million so far, accepting \
 ${Math.floor(SCORES[userId].taken / (SCORES[userId].taken + SCORES[userId].refused) * 100)}% \
 of voted scenarios!\n`
