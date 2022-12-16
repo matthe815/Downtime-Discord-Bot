@@ -151,7 +151,7 @@ module.exports.addCondition = (message) => {
   }
 
   conditions.push(condition)
-  fs.appendFile(path.resolve(__dirname, '../data/million', 'userconditions.txt'), `${condition}\n`)
+  fs.appendFileAsync(path.resolve(__dirname, '../data/million', 'userconditions.txt'), `${condition}\n`)
   message.reply(`Added condition ${condition}`)
 }
 
@@ -168,6 +168,6 @@ module.exports.addOutcome = (message) => {
   }
 
   outcomes.push(outcome)
-  fs.appendFile(path.resolve(__dirname, '../data/million', 'useroutcomes.txt'), `${outcome}\n`)
+  fs.appendFileAsync(path.resolve(__dirname, '../data/million', 'useroutcomes.txt'), `${outcome}\n`)
   message.reply(`added outcome ${outcome}`)
 }
