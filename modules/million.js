@@ -122,11 +122,11 @@ module.exports.no = (message) => {
  * List the scores for the current ongoing game.
  * @param {Message} message
  */
-module.exports.scores = (message) => {
+module.exports.scores = async (message) => {
   let scoreMessage = ''
 
   for (const userId in SCORES) {
-    const user = message.guild.members.cache.find((user) => user.id === userId)
+    const user = await message.guild.members.fetch(userId)
 
     if (!user) continue
 
