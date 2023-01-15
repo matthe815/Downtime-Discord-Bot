@@ -16,33 +16,33 @@ const getImage = function (keyword, channel) {
       const photo = photos[Math.floor(Math.random() * photos.length)]
 
       if (!photo || !photo.url_o) throw new Error('photo missing')
-      channel.send(photo.url_o)
+      channel.reply(photo.url_o)
     } catch (e) {
-      channel.send('Failed to get image from Flickr')
+      channel.reply('Failed to get image from Flickr')
     }
   })
 }
 
 module.exports.birb = function (message) {
-  getImage('bird', message.channel)
+  getImage('bird', message)
 }
 
 module.exports.doggo = function (message) {
-  getImage('dog', message.channel)
+  getImage('dog', message)
 }
 
 module.exports.kitty = function (message) {
-  getImage('cat', message.channel)
+  getImage('cat', message)
 }
 
 module.exports.betta = function (message) {
-  getImage('betta fish', message.channel)
+  getImage('betta fish', message)
 }
 
 module.exports.hug = function (message) {
-  getImage('hug', message.channel)
+  getImage('hug', message)
 }
 
 module.exports.imageSearch = function (message) {
-  getImage(message.content.slice(6), message.channel)
+  getImage(message.content.slice(6), message)
 }

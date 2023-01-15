@@ -1,22 +1,13 @@
-const danbooru = require('./danbooru')
-const flickr = require('./flickr')
 const million = require('./million')
 const ping = require('./ping')
-const quote = require('./quote')
 const random = require('./random')
-const troll = require('./troll')
-const urban = require('./urban')
+const millionare = require('./millionare')
+const { scores } = require('./million/ScoreHandler')
+const outcome = require('./million/Outcomes')
+const conditions = require('./million/Conditions')
 
 const listeners = [
 ]
-
-async function help (message) {
-  const cmds = Object.keys(module.exports.messageRoutes)
-  const cmdstr = cmds.join('\n')
-
-  message.reply('Check your DMs.')
-  await message.author.sendMessage(`Bot Commands list\n*${cmdstr}*`)
-}
 
 module.exports.messageRoutes = {
   // Ping
@@ -29,51 +20,19 @@ module.exports.messageRoutes = {
   '>yeah': million.yes,
   '>no': million.no,
   '>nope': million.no,
-  '>addcondition': million.addCondition,
-  '>addoutcome': million.addOutcome,
-  '>wealth': million.scores,
+  '>addcondition': conditions.add,
+  '>addoutcome': outcome.add,
+  '>wealth': scores,
 
-  // Flickr
-  '>birb': flickr.birb,
-  '>bird': flickr.birb,
-  '>birdie': flickr.birb,
-  '>dog': flickr.doggo,
-  '>doggie': flickr.doggo,
-  '>doggo': flickr.doggo,
-  '>cat': flickr.kitty,
-  '>kitty': flickr.kitty,
-  '>betta': flickr.betta,
-  '>image': flickr.imageSearch,
-  '>hug': flickr.hug,
-
-  // danbooru
-  '>safe': danbooru.safe,
-  '>ecchi': danbooru.ecchi,
-  '>nsfw': danbooru.nsfw,
+  // Millionare
+  '>millionaire': millionare.scores,
 
   // Random
-  '>dice': random.dice,
-  '>roll': random.dice,
-  '>pick': random.pick,
-
-  // Urban Dictionary
-  '>urban': urban.urban,
-
-  // Quote
-  '>quote': quote.quote,
-
-  // Troll commands
-  '>f': troll.F,
-  '>rip': troll.rip,
-  '>throw': troll.tablethrow,
-  '>lenny': troll.lenny,
-  '>lennyface': troll.lenny,
-  '>shameshame': troll.shame,
-
-  // Help
-  '>help': help
+  '>dice': random.dice
 }
 
-module.exports.listen = function (client) {
+module.exports.millionare = millionare
+
+module.exports.listen = (client) => {
   listeners.forEach(lFunc => lFunc(client))
 }

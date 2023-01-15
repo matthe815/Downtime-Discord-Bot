@@ -56,7 +56,7 @@ function requestImage (message, rating, attempts) {
       if (entry.file_url !== undefined) {
         const url = entry.file_url
 
-        if (url.startsWith('https://') || url.startsWith('http://')) { message.channel.send(url) } else { message.channel.send('https://danbooru.donmai.us' + url) }
+        if (url.startsWith('https://') || url.startsWith('http://')) { message.reply(url) } else { message.reply('https://danbooru.donmai.us' + url) }
       } else if (attempts > 0) { requestImage(message, rating, attempts - 1) } else { message.channel.send(ERROR_TRYAGAIN) }
     })
 }

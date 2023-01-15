@@ -1,38 +1,68 @@
-const Discord = require('discord.js')
-const client = new Discord.Client({ intents: ['GuildMessages', 'Guilds', 'MessageContent'] })
+const { Client, Events, Routes, REST, InteractionType } = require('discord.js')
 const modules = require('../modules')
+const CommandRegistry = require('./commandModules')
+const { runUpdateCheck } = require('./updateChecker')
 
-client.once('ready', () => {
-  console.log(`Logged in as ${client.user.tag}`)
-  modules.listen(client)
-})
+class DowntimeClient extends Client {
+  constructor () {
+    super({ intents: ['GuildMessages', 'Guilds', 'MessageContent'] })
 
-client.on('messageCreate', message => {
-  const content = message.content
-  try {
-    if (message.author.bot) return
+    /**
+     * The command modules for the bot
+     * @type {typeof import('../modules')}
+     */
+    this.modules = modules
+    this.commands = CommandRegistry.makeCommands()
 
-    const command = content.indexOf(' ') >= 0 ? content.substr(0, content.indexOf(' ')).toLowerCase() : content.toLowerCase()
+    this.previousDay = new Date().getTime() % (86400000 / 2)
 
-    if (modules.messageRoutes[command]) {
-      modules.messageRoutes[command](message)
-    }
-  } catch (e) {
-    console.warn(`error occured while attempting to handle message syncronously: ${content}`)
-    console.warn(`Error: ${e}`)
+    this.rest = new REST({ version: '10' })
+
+    this.once(Events.ClientReady, this.onReady.bind(this))
+    this.on(Events.InteractionCreate, this.onInteractionCreated.bind(this))
+
+    runUpdateCheck()
   }
-})
 
-// create event listener for new members
-client.on('guildMemberAdd', member => {
-  // Sends greeting to the channel for system messages (has to be set in server settings), mentioning the member.
-  if (member.guild.systemChannel != null) { member.guild.systemChannel.send(`Welcome to the server, ${member.displayName}!`) }
-})
+  // Fired on client ready event
+  onReady () {
+    console.log('Ready')
 
-// create event listener for when members leave server
-client.on('guildMemberRemove', member => {
-  // Sends leave message to the channel for system messages (has to be set in server settings)
-  if (member.guild.systemChannel != null) { member.guild.systemChannel.send(`${member.displayName} has left the server.`) }
-})
+    this.rest.setToken(this.token)
 
-module.exports = client
+    this.rest.put(
+      Routes.applicationCommands(this.user.id),
+      { body: CommandRegistry.makeCommandListResponse() }
+    )
+
+    this.user.setPresence({ activities: [{ name: 'Downtime', type: 'PLAYING' }] })
+
+    // Wait until the next day
+    setInterval(() => {
+      const now = new Date().getTime() % (86400000 / 2)
+
+      if (now < this.previousDay) {
+        modules.millionare.startGame(this)
+      }
+
+      this.previousDay = now
+    }, 60000)
+
+    modules.millionare.startGame(this)
+  }
+
+  // Fired when an application interaction is recieved
+  onInteractionCreated (interaction) {
+    switch (interaction.type) {
+      case InteractionType.MessageComponent: // If someone clicks a button
+        modules.millionare.handleResponse(interaction)
+        break
+
+      case InteractionType.ApplicationCommand: // If someone uses a slash command
+        if (this.commands[interaction.commandName]) this.commands[interaction.commandName](interaction)
+        break
+    }
+  }
+}
+
+module.exports = DowntimeClient

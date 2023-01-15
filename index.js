@@ -1,4 +1,4 @@
-const client = require('./client')
+const DownTimeClient = require('./client/index')
 const keys = require('./util/keys')
 
-client.login(keys.DISCORD_TOKEN)
+new DownTimeClient().login(keys.DISCORD.TOKEN)

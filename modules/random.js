@@ -1,30 +1,45 @@
-module.exports.dice = (message) => {
-  const args = message.content.slice(5)
-  const d = args.indexOf('d')
+module.exports.dice = (interaction) => {
+  // Get the number of faces and dice to roll
+  const faces = interaction.options.getInteger('faces')
+  const diceCount = interaction.options.getInteger('dice')
 
-  if (d >= 0) {
-    const dice = parseInt(args.slice(0, d)) || 1
-    const eyes = parseInt(args.slice(d + 1)) || 6
+  // Get the default values if not set.
+  const dice = parseInt(diceCount) || 1
+  const eyes = parseInt(faces) || 6
 
-    let sum = 0
+  let sum = 0
 
-    const values = new Array(dice).fill(undefined).map(() => {
-      const e = Math.floor(Math.random() * eyes) + 1
-      console.log(`e: ${e}, ${typeof (e)}`)
-      sum += e
-      return e
-    })
+  // Create an array of diceCount length and fill it with undefined to map with random values based on face count
+  const values = new Array(dice).fill(undefined).map(() => {
+    const e = Math.floor(Math.random() * eyes) + 1
+    sum += e
+    return e
+  })
 
-    values.sort()
-    values.reverse()
+  values.sort()
+  values.reverse()
 
-    message.reply(`you rolled a ${sum} (${values.join(', ')})`)
-  } else {
-    const diceValue = parseInt(args) || 20
+  // state the user who rolled, what they rolled, the value of what they rolled
+  interaction.reply({
+    content: `${interaction.user.username} rolled ${dice} dice with ${eyes} faces and got ${values.join(', ')} for a total of ${sum}`
+  })
+}
 
-    const roll = Math.floor(Math.random() * diceValue) + 1
-    message.reply(`you rolled a ${roll}`)
-  }
+module.exports.dice.command = {
+  name: 'dice',
+  description: 'Roll a dice',
+  options: [
+    {
+      name: 'faces',
+      description: 'The number of faces on the dice',
+      type: 4
+    },
+    {
+      name: 'dice',
+      description: 'The dice to roll',
+      type: 4
+    }
+  ]
 }
 
 module.exports.pick = function (message) {
