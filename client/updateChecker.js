@@ -20,8 +20,8 @@ module.exports.runUpdateCheck = async (client) => {
   const version = await module.exports.checkVersion()
 
   if (version !== packageFile.version) {
-    client.logger.info(`New version available: ${version}`)
-    client.logger.info(`Current version: ${packageFile.version}`)
-    client.logger.info('Please update your bot!')
+    console.warn(`New version available: ${version}`)
+    console.warn(`Current version: ${packageFile.version}`)
+    console.warn('Please update your bot!')
   }
 }

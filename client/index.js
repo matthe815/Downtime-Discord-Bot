@@ -20,8 +20,6 @@ class DowntimeClient extends Client {
 
     this.once(Events.ClientReady, this.onReady.bind(this))
     this.on(Events.InteractionCreate, this.onInteractionCreated.bind(this))
-
-    runUpdateCheck()
   }
 
   // Fired on client ready event
@@ -46,9 +44,12 @@ class DowntimeClient extends Client {
       }
 
       this.previousDay = now
+
+      runUpdateCheck() // Run the update check alongside the daily reset
     }, 60000)
 
     modules.millionare.startGame(this)
+    runUpdateCheck()
   }
 
   // Fired when an application interaction is recieved
