@@ -2,6 +2,9 @@ const fs = require('fs')
 const path = require('path')
 const yaml = require('js-yaml')
 
+// Automatically generate the high score files if they don't exist
+fs.existsSync(path.resolve(__dirname, '../../data/million/millonare.txt')) || fs.writeFileSync(path.resolve(__dirname, '../../data/million/millonare.txt'))
+
 const SCORESFILE = path.resolve(__dirname, '../../data/million/millionare.txt')
 const SCORES = yaml.load(fs.readFileSync(SCORESFILE, 'utf8')) || {}
 
