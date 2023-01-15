@@ -16,7 +16,7 @@ module.exports.checkVersion = async () => {
   })
 }
 
-module.exports.runUpdateCheck = async (client) => {
+module.exports.runUpdateCheck = async () => {
   const version = await module.exports.checkVersion()
 
   if (version !== packageFile.version) {

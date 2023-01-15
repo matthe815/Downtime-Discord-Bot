@@ -12,6 +12,7 @@ class DowntimeClient extends Client {
      * @type {typeof import('../modules')}
      */
     this.modules = modules
+
     this.commands = CommandRegistry.makeCommands()
 
     this.previousDay = new Date().getTime() % (86400000 / 2)
@@ -20,6 +21,7 @@ class DowntimeClient extends Client {
 
     this.once(Events.ClientReady, this.onReady.bind(this))
     this.on(Events.InteractionCreate, this.onInteractionCreated.bind(this))
+    setInterval(this.onNextDay, 60000)
   }
 
   // Fired on client ready event
@@ -32,21 +34,6 @@ class DowntimeClient extends Client {
       Routes.applicationCommands(this.user.id),
       { body: CommandRegistry.makeCommandListResponse() }
     )
-
-    this.user.setPresence({ activities: [{ name: 'Downtime', type: 'PLAYING' }] })
-
-    // Wait until the next day
-    setInterval(() => {
-      const now = new Date().getTime() % (86400000 / 2)
-
-      if (now < this.previousDay) {
-        modules.millionare.startGame(this)
-      }
-
-      this.previousDay = now
-
-      runUpdateCheck() // Run the update check alongside the daily reset
-    }, 60000)
 
     modules.millionare.startGame(this)
     runUpdateCheck()
@@ -63,6 +50,16 @@ class DowntimeClient extends Client {
         if (this.commands[interaction.commandName]) this.commands[interaction.commandName](interaction)
         break
     }
+  }
+
+  onNextDay () {
+    const now = new Date().getTime() % (86400000 / 2)
+    if (now < this.previousDay) return
+
+    this.previousDay = now
+
+    modules.millionare.startGame(this)
+    runUpdateCheck() // Run the update check alongside the daily reset
   }
 }
 
