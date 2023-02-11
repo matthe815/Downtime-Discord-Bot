@@ -34,9 +34,6 @@ class DowntimeClient extends Client {
       Routes.applicationCommands(this.user.id),
       { body: CommandRegistry.makeCommandListResponse() }
     )
-
-    modules.millionare.startGame(this)
-    runUpdateCheck()
   }
 
   // Fired when an application interaction is recieved
